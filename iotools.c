@@ -43,7 +43,7 @@ usage(const char *bin_name, FILE *fstream)
 static void
 version(const char *progname)
 {
-	printf("%s version %d.%d\n", progname, VER_MAJOR, VER_MINOR);
+	printf("%s version %d.%s\n", progname, VER_MAJOR, VER_MINOR);
 }
 
 int
