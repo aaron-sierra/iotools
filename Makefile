@@ -33,7 +33,7 @@ else
 IOTOOLS_DEBUG = -O2 -DNDEBUG
 endif
 
-CFLAGS = -Wall -Werror $(DEFS) $(ARCHFLAGS) $(EXTRA_CFLAGS) \
+CFLAGS := -Wall -Werror $(ARCHFLAGS) $(EXTRA_CFLAGS) \
          $(IOTOOLS_STATIC) $(IOTOOLS_DEBUG)
 DEFS = -D_GNU_SOURCE -DVER_MAJOR=$(VER_MAJOR) -DVER_MINOR=$(VER_MINOR)
 SBINDIR ?= /usr/local/sbin
@@ -43,6 +43,9 @@ OBJS_TO_BUILD=$(filter-out iotools.o, $(patsubst %.c,%.o,$(wildcard *.c)))
 OBJS=$(OBJS_TO_BUILD)
 
 all: $(BINARY)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(DEFS) -o $@ $^
 
 $(BINARY): $(OBJS) iotools.o Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ iotools.o $(OBJS)
