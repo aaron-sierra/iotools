@@ -21,6 +21,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "commands.h"
+#include "config.h"
 
 static const char *bin_name = NULL;
 
