@@ -22,15 +22,21 @@
 #include <unistd.h>
 #include "commands.h"
 
+static const char *bin_name = NULL;
+
 int
 main(int argc, const char *argv[])
 {
-	int rc = run_command(argc, argv);
+	int rc;
+
+	bin_name = basename(argv[0]);
+
+	rc = run_command(argc, argv);
 	exit((rc < 0) ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 static void
-usage(const char *bin_name, FILE *fstream)
+usage(FILE *fstream)
 {
 	fprintf(fstream, "usage: %s COMMAND\n", bin_name);
 	fprintf(fstream, "  COMMANDS:\n"
@@ -41,21 +47,21 @@ usage(const char *bin_name, FILE *fstream)
 }
 
 static void
-version(const char *progname)
+version()
 {
-	printf("%s version %d.%d\n", progname, VER_MAJOR, VER_MINOR);
+	printf("%s version %d.%d\n", bin_name, VER_MAJOR, VER_MINOR);
 }
 
 int
 iotools_fallback(int argc, const char *argv[])
 {
 	if (argc != 2) {
-		usage(argv[0], stderr);
+		usage(stderr);
 		return -1;
 	}
 
 	if (strcmp(argv[1], "--help") == 0) {
-		usage(argv[0], stdout);
+		usage(stdout);
 		return 0;
 	}
 
@@ -72,11 +78,11 @@ iotools_fallback(int argc, const char *argv[])
 	}
 
 	if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0) {
-		version(argv[0]);
+		version();
 		return 0;
 	}
 
 	fprintf(stderr, "'%s' sub-command not supported by iotools\n", argv[1]);
-	usage(argv[0], stderr);
+	usage(stderr);
 	return -1;
 }
